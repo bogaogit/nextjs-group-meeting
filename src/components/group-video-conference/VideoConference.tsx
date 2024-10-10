@@ -1,3 +1,5 @@
+"use client";
+
 import React, {useEffect, useRef, useState} from 'react';
 import Peer from 'simple-peer';
 import VideoCard from './VideoCard';
