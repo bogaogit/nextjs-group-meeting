@@ -1,25 +1,19 @@
 import React, {useEffect, useRef, useState} from 'react';
-import socket from './socket';
 import Peer from 'simple-peer';
-import VideoCard from "./VideoCard";
+import socket from './socket';
+import VideoCard from './VideoCard';
 
-export interface VideoConferenceProps {
-    roomId: string;
-}
-
-export const VideoConference = (props: VideoConferenceProps) => {
-    const currentUser = sessionStorage.getItem('user');
-    console.log("currentUser:" + currentUser)
-    console.log("roomId:" + props.roomId)
+export const VideoConference = () => {
+    const currentUser = Math.random() + ""
     const [peers, setPeers] = useState([]);
     const [userVideoAudio, setUserVideoAudio] = useState({
         localUser: {video: true, audio: true},
     });
 
     const peersRef = useRef([]);
-    const userVideoRef = useRef(undefined);
-    const userStream = useRef(undefined);
-    const roomId = props.roomId;
+    const userVideoRef = useRef();
+    const userStream = useRef();
+    const roomId = 0;
 
     useEffect(() => {
         // Connect Camera & Mic
@@ -153,16 +147,19 @@ export const VideoConference = (props: VideoConferenceProps) => {
     }
 
     return (
-        <>???roomId: {props.roomId}, userName: {currentUser}
+        <>
             <video
                 ref={userVideoRef}
                 muted
                 autoPlay
-                playsInline
+                playInline
             ></video>
 
+            {/* Joined User Vidoe */}
             {peers &&
                 peers.map((peer, index, arr) => createUserVideo(peer, index, arr))}
         </>
     );
 };
+
+
