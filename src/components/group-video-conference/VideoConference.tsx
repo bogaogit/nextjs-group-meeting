@@ -4,8 +4,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import Peer from 'simple-peer';
 import VideoCard from './VideoCard';
 import io from "socket.io-client";
-let socket;
+import { useSocket } from './SocketProvider';
 export const VideoConference = () => {
+    const socket = useSocket();
     console.log("* VideoConference")
 
     const currentUser = Math.random() + ""
@@ -21,7 +22,6 @@ export const VideoConference = () => {
 
     useEffect(() => {
         console.log("* init effect")
-        socket = io('https://video-group-meeting-master.onrender.com', { autoConnect: true, forceNew: true });
 
         // Connect Camera & Mic
         navigator.mediaDevices
