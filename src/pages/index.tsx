@@ -1,4 +1,5 @@
-import localFont from "next/font/local";
+"use client";
+
 import {VideoConference} from "@/components/group-video-conference/VideoConference";
 
 export default function Home() {
