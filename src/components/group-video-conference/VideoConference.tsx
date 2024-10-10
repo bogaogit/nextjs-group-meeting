@@ -4,6 +4,7 @@ import socket from './socket';
 import VideoCard from './VideoCard';
 
 export const VideoConference = () => {
+    console.log("* VideoConference")
     const currentUser = Math.random() + ""
     const [peers, setPeers] = useState([]);
     const [userVideoAudio, setUserVideoAudio] = useState({
@@ -16,15 +17,21 @@ export const VideoConference = () => {
     const roomId = 0;
 
     useEffect(() => {
+        console.log("* init effect")
+
         // Connect Camera & Mic
         navigator.mediaDevices
             .getUserMedia({video: true, audio: true})
             .then((stream) => {
+                console.log("mediaDevices")
                 userVideoRef.current.srcObject = stream;
                 userStream.current = stream;
 
+                console.log("BE-join-room: " + currentUser)
+
                 socket.emit('BE-join-room', {roomId, userName: currentUser});
                 socket.on('FE-user-join', (users) => {
+                    console.log("FE-user-join: " + users)
                     // all users
                     const peers = [];
                     users.forEach(({userId, info}) => {
@@ -56,6 +63,7 @@ export const VideoConference = () => {
                 });
 
                 socket.on('FE-receive-call', ({signal, from, info}) => {
+                    console.log("FE-receive-call: " + from)
                     let {userName, video, audio} = info;
                     const peerIdx = findPeer(from);
 
@@ -82,6 +90,7 @@ export const VideoConference = () => {
                 });
 
                 socket.on('FE-call-accepted', ({signal, answerId}) => {
+                    console.log("FE-call-accepted: " + answerId)
                     const peerIdx = findPeer(answerId);
                     peerIdx.peer.signal(signal);
                 });
@@ -90,6 +99,7 @@ export const VideoConference = () => {
             });
 
         return () => {
+            console.log("disconnect")
             socket.disconnect();
         };
         // eslint-disable-next-line
